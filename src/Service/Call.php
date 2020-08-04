@@ -4,9 +4,11 @@ namespace App\Service;
 
 use App\Entity\Shop;
 use GuzzleHttp\Client;
-use JMS\Serializer\Serializer;
 use PSR\Log\LoggerInterface;
+use JMS\Serializer\Serializer;
 use App\Repository\ShopRepository;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class Call
 {
@@ -26,13 +28,24 @@ class Call
      * @var ShopRepository
      */
     private $repository;
+    /**
+     * @var EntityManagerInterface
+     */
+    private $entityManager;
+    /**
+     * @var ContainerInterface
+     */
+    private $container;
 
-    public function __construct(Client $apiClient, Serializer $serializer, LoggerInterface $logger, ShopRepository $repository)
+    public function __construct(Client $apiClient, Serializer $serializer, LoggerInterface $logger,
+                                ShopRepository $repository, EntityManagerInterface $entityManager, ContainerInterface $container)
     {
         $this->apiClient = $apiClient;
         $this->serializer = $serializer;
         $this->logger = $logger;
         $this->repository = $repository;
+        $this->entityManager = $entityManager;
+        $this->container = $container;
     }
 
     public function getConnexion()

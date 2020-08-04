@@ -35,3 +35,5 @@ services:
             $serializer: '@jms_serializer'
             $logger: '@monolog.logger.php'
             $repository: '@App\Repository\ShopRepository'
+            $entityManager: '@doctrine.orm.entity_manager'
+            $container: '@service_container'
