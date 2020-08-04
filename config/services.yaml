@@ -33,3 +33,4 @@ services:
         arguments:
             $apiClient: '@csa_guzzle.client.leshabitues'
             $serializer: '@jms_serializer'
+            $logger: '@monolog.logger.php'
