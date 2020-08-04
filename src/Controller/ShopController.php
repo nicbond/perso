@@ -15,9 +15,12 @@ class ShopController extends AbstractFOSRestController
 {
     /**
      * @Rest\Get("les-habitues/shops", name="app_shops_list")
+     * @param Request $request
+     * @return Response
      */
-    public function shop(Request $request, Call $call)
+    public function shop(Request $request, Call $call): Response
     {
         $fisrt = $call->getConnexion();
+        return $fisrt;
     }
 }
