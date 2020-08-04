@@ -10,6 +10,8 @@ use App\Repository\ShopRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
+use Symfony\Component\HttpFoundation\Response;
+
 class Call
 {
     /**
@@ -64,6 +66,12 @@ class Call
             $data = $this->serializer->deserialize($response->getBody()->getContents(), 'array', 'json');
             $this->getData($data);
         }
+        
+        if ($this->getData($data) == true){
+            $response = new Response('SHOP CREATED OR UPDATED', Response::HTTP_CREATED);
+        }
+
+        return $response;
     }
     
     public function getData(array $data)
@@ -86,6 +94,10 @@ class Call
                         $shop->setImage($data['data'][$i]['picture_url']);
                         $shop->setOffer($data['data'][$i]['offers'][0]['reduction']);
                         $shop->setIdShop($data['data'][$i]['objectID']);
+                        
+                        $this->validator($shop); //Data control
+
+                        $this->entityManager->persist($shop);
                     } else {
                         $shopAlreadyExist = $this->repository->find($shopSearch->getId());
                         $shopAlreadyExist->setNameShop($data['data'][$i]['chain']);
@@ -95,12 +107,34 @@ class Call
                         $shopAlreadyExist->setImage($data['data'][$i]['picture_url']);
                         $shopAlreadyExist->setOffer($data['data'][$i]['offers'][0]['reduction']);
                         $shopAlreadyExist->setIdShop($data['data'][$i]['objectID']);
+
+                        $this->validator($shopAlreadyExist); //Data control
+
+                        $this->entityManager->persist($shopAlreadyExist);
                     }
+                    $this->entityManager->flush();
                 } catch (\Doctrine\ORM\ORMException $e) {
                     $errorMsg = 'Error Doctrine for the id_shop '.$data['data'][$i]['objectID'].'<br/>'.$e->getMessage();
                 }
             $i++;
         } while ($i <= $size);
+        return true;
+    }
+
+    public function validator(Shop $shop)
+    {
+        $validator = $this->container->get('validator');
+
+        $violations = $validator->validate($shop);
+
+        if (count($violations)) {
+            $message = 'Invalid data. Here are the errors you need to correct: ' .'</br>';
+            foreach ($violations as $violation) {
+                $message .= sprintf("Field %s: %s ", $violation->getPropertyPath(), $violation->getMessage());
+                $message .= '</br>';
+            }
+            throw new \Exception($message);
+        }
     }
 }
 ?>
