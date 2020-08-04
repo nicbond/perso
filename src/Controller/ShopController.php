@@ -9,6 +9,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+use App\Service\Call;
+
 class ShopController extends AbstractFOSRestController
 {
     /**
@@ -16,6 +18,6 @@ class ShopController extends AbstractFOSRestController
      */
     public function shop(Request $request, Call $call)
     {
-
+        $fisrt = $call->getConnexion();
     }
 }

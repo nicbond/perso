@@ -21,5 +21,21 @@ class Call
         $this->apiClient = $apiClient;
         $this->serializer = $serializer;
     }
+
+    public function getConnexion()
+    {
+        $uri = '/testapi/shops';
+
+        try {
+            $response = $this->apiClient->get($uri);
+        } catch (\Exception $e) {
+            return ['error' => 'Les informations ne sont pas disponibles pour le moment.'];
+        }
+        $httpCode = $response->getStatusCode();
+        var_dump($httpCode);die;
+
+        $data = $this->serializer->deserialize($response->getBody()->getContents(), 'array', 'json');
+        //var_dump($data);die;
+    }
 }
 ?>
