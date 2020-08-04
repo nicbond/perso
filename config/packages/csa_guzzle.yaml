@@ -4,6 +4,6 @@
 csa_guzzle:
     profiler: '%kernel.debug%'
     clients:
-        weather:
+        leshabitues:
             config:
                 base_uri: https://www.leshabitues.fr
