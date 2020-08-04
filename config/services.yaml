@@ -29,3 +29,7 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+    App\Service\Call:
+        arguments:
+            $apiClient: '@csa_guzzle.client.leshabitues'
+            $serializer: '@jms_serializer'
