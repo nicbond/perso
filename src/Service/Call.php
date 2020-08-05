@@ -8,7 +8,7 @@ use PSR\Log\LoggerInterface;
 use JMS\Serializer\Serializer;
 use App\Repository\ShopRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 use Symfony\Component\HttpFoundation\Response;
 
@@ -35,22 +35,22 @@ class Call
      */
     private $entityManager;
     /**
-     * @var ContainerInterface
+     * @var ValidatorInterface
      */
-    private $container;
+    private $validator;
 
     public function __construct(Client $apiClient, Serializer $serializer, LoggerInterface $logger,
-                                ShopRepository $repository, EntityManagerInterface $entityManager, ContainerInterface $container)
+                                ShopRepository $repository, EntityManagerInterface $entityManager, ValidatorInterface $validator)
     {
         $this->apiClient = $apiClient;
         $this->serializer = $serializer;
         $this->logger = $logger;
         $this->repository = $repository;
         $this->entityManager = $entityManager;
-        $this->container = $container;
+        $this->validator = $validator;
     }
 
-    public function getConnexion()
+    public function getConnexion(): Response
     {
         $uri = '/testapi/shops';
 
@@ -95,7 +95,7 @@ class Call
                         $shop->setOffer($data['data'][$i]['offers'][0]['reduction']);
                         $shop->setIdShop($data['data'][$i]['objectID']);
                         
-                        $this->validator($shop); //Data control
+                        $this->validatorData($shop); //Data control
 
                         $this->entityManager->persist($shop);
                     } else {
@@ -108,7 +108,7 @@ class Call
                         $shopAlreadyExist->setOffer($data['data'][$i]['offers'][0]['reduction']);
                         $shopAlreadyExist->setIdShop($data['data'][$i]['objectID']);
 
-                        $this->validator($shopAlreadyExist); //Data control
+                        $this->validatorData($shopAlreadyExist); //Data control
 
                         $this->entityManager->persist($shopAlreadyExist);
                     }
@@ -121,11 +121,9 @@ class Call
         return true;
     }
 
-    public function validator(Shop $shop)
+    public function validatorData(Shop $shop)
     {
-        $validator = $this->container->get('validator');
-
-        $violations = $validator->validate($shop);
+        $violations = $this->validator->validate($shop);
 
         if (count($violations)) {
             $message = 'Invalid data. Here are the errors you need to correct: ' .'</br>';
