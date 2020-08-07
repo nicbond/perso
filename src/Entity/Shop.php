@@ -19,13 +19,13 @@ class Shop
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Assert\Length(min=4, max=255)
+     * @Assert\Length(min=4, max=255, allowEmptyString=false)
      */
     private $nameShop;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Assert\Length(min=5, max=255)
+     * @Assert\Length(min=5, max=255, allowEmptyString=false)
      */
     private $address;
 
@@ -37,13 +37,13 @@ class Shop
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Assert\Length(min=4, max=255)
+     * @Assert\Length(min=4, max=255, allowEmptyString=false)
      */
     private $city;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Assert\Length(min=5, max=255)
+     * @Assert\Length(min=5, max=255, allowEmptyString=false)
      */
     private $image;
 
