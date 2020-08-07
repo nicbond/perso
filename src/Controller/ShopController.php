@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\ConstraintViolationList;
 use App\Exception\ResourceValidationException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 use App\Service\Call;
 
@@ -26,6 +27,35 @@ class ShopController extends AbstractFOSRestController
     {
         $fisrt = $call->getConnexion();
         return $fisrt;
+    }
+
+    /**
+     * @Rest\Post(
+     *    path = "les-habitues/shops",
+     *    name = "app_shop_create"
+     * )
+     * @Rest\View(StatusCode = 201)
+     * @ParamConverter("shop", converter="fos_rest.request_body")
+     */
+    public function createAction(Shop $shop, ConstraintViolationList $violations)
+    {
+        if (count($violations)) {
+            $message = 'The JSON sent contains invalid data. Here are the errors you need to correct: ';
+            foreach ($violations as $violation) {
+                $message .= sprintf("Field %s: %s ", $violation->getPropertyPath(), $violation->getMessage());
+            }
+
+            throw new ResourceValidationException($message);
+        }
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($shop);
+        $em->flush();
+
+        return $this->view(
+            $shop, 
+            Response::HTTP_CREATED,
+            ['Location' => $this->generateUrl('app_shop_show', ['id' => $shop->getId(), UrlGeneratorInterface::ABSOLUTE_URL])]);
     }
 
     /**
