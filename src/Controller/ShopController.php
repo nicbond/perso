@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Shop;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\View;
@@ -22,5 +23,22 @@ class ShopController extends AbstractFOSRestController
     {
         $fisrt = $call->getConnexion();
         return $fisrt;
+    }
+
+    /**
+     * @Rest\View(StatusCode = 204)
+     * @Rest\Delete(
+     *     path = "les-habitues/shops/{id}",
+     *     name = "app_shops_delete",
+     *     requirements = {"id"="\d+"}
+     * )
+     */
+    public function delete(Shop $shop)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($shop);
+        $em->flush();
+
+        return;
     }
 }
