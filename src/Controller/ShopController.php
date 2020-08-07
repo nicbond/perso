@@ -29,6 +29,19 @@ class ShopController extends AbstractFOSRestController
     }
 
     /**
+     * @Rest\Get(
+     *     path = "les-habitues/shops/{id}",
+     *     name = "app_shop_show",
+     *     requirements = {"id"="\d+"}
+     * )
+     * @View
+     */
+    public function show(Shop $shop)
+    {
+        return $shop;
+    }
+
+    /**
      * @Rest\View(StatusCode = 200)
      * @Rest\Put(
      *     path = "les-habitues/shops/{id}",
