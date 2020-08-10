@@ -12,11 +12,60 @@ use Symfony\Component\HttpFoundation\Response;
 use App\Exception\ResourceValidationException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use App\Representation\Shops;
+use FOS\RestBundle\Controller\Annotations\QueryParam;
+use App\Repository\ShopRepository;
 
 use App\Service\Call;
 
 class ShopController extends AbstractFOSRestController
 {
+    /**
+     * @var PropertyRepository
+     */
+    private $repository;
+
+    public function __construct(ShopRepository $repository)
+    {
+        $this->repository = $repository;
+    }
+
+    /**
+     * @Rest\Get("les-habitues/shops/list", name="app_shops_listing")
+     * @Rest\QueryParam(
+     *     name="keyword",
+     *     requirements="[a-zA-Z0-9]",
+     *     nullable=true,
+     *     description="The keyword to search for."
+     * )
+     * @Rest\QueryParam(
+     *     name="order",
+     *     requirements="asc|desc",
+     *     default="asc",
+     *     description="Sort order (asc or desc)"
+     * )
+     * @Rest\QueryParam(
+     *     name="limit",
+     *     requirements="\d+",
+     *     default="25",
+     *     description="Max number of shops per page."
+     * )
+     * @Rest\QueryParam(
+     *     name="offset",
+     *     requirements="\d+",
+     *     default="0",
+     *     description="The pagination offset"
+     * )
+     * @Rest\View()
+     *
+     */
+    public function shopList($keyword, $order, $limit, $offset)
+    {
+        $pager = $this->repository->search($keyword, $order, $limit, $offset);
+ 
+        return new Shops($pager);
+    }
+
     /**
      * @Rest\Get("les-habitues/shops", name="app_shops_list")
      * @param Request $request
@@ -36,7 +85,7 @@ class ShopController extends AbstractFOSRestController
      * @Rest\View(StatusCode = 201)
      * @ParamConverter("shop", converter="fos_rest.request_body")
      */
-    public function createAction(Shop $shop, Call $call)
+    public function create(Shop $shop, Call $call)
     {
         $controlData = $call->validatorData($shop);
 

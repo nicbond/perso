@@ -27,12 +27,12 @@ class ShopRepository extends ServiceEntityRepository
         $qb = $this
             ->createQueryBuilder('s')
             ->select('s')
-            ->orderBy('s.title', $order)
+            ->orderBy('s.nameShop', $order)
         ;
 
         if ($term) {
             $qb
-                ->where('s.title LIKE ?1')
+                ->where('s.nameShop LIKE ?1')
                 ->setParameter(1, '%'.$term.'%')
             ;
         }
