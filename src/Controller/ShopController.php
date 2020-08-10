@@ -37,16 +37,9 @@ class ShopController extends AbstractFOSRestController
      * @Rest\View(StatusCode = 201)
      * @ParamConverter("shop", converter="fos_rest.request_body")
      */
-    public function createAction(Shop $shop, ConstraintViolationList $violations)
+    public function createAction(Shop $shop, Call $call)
     {
-        if (count($violations)) {
-            $message = 'The JSON sent contains invalid data. Here are the errors you need to correct: ';
-            foreach ($violations as $violation) {
-                $message .= sprintf("Field %s: %s ", $violation->getPropertyPath(), $violation->getMessage());
-            }
-
-            throw new ResourceValidationException($message);
-        }
+        $controlData = $call->validatorData($shop);
 
         $em = $this->getDoctrine()->getManager();
         $em->persist($shop);
@@ -80,16 +73,9 @@ class ShopController extends AbstractFOSRestController
      * )
      * @ParamConverter("newShop", converter="fos_rest.request_body")
      */
-    public function update(Shop $shop, Shop $newShop, ConstraintViolationList $violations)
+    public function update(Shop $shop, Shop $newShop, Call $call)
     {
-        if (count($violations)) {
-            $message = 'The JSON sent contains invalid data. Here are the errors you need to correct: ';
-            foreach ($violations as $violation) {
-                $message .= sprintf("Field %s: %s ", $violation->getPropertyPath(), $violation->getMessage());
-            }
-
-            throw new ResourceValidationException($message);
-        }
+        $controlData = $call->validatorData($shop);
 
         $shop->setNameShop($newShop->getNameShop());
         $shop->setAddress($newShop->getAddress());
