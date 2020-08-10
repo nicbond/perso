@@ -6,7 +6,7 @@ use App\Entity\Shop;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\ORM\QueryBuilder;
-use Pagerfanta\Adapter\DoctrineORMAdapter;
+use Pagerfanta\Doctrine\ORM\QueryAdapter;
 use Pagerfanta\Pagerfanta;
 
 /**
@@ -48,7 +48,7 @@ class ShopRepository extends ServiceEntityRepository
             throw new \LogicException('$limit must be greater than 0.');
         }
  
-        $pager = new Pagerfanta(new DoctrineORMAdapter($qb));
+        $pager = new Pagerfanta(new QueryAdapter($qb));
         $pager->setCurrentPage(ceil(($offset + 1) / $limit));
         $pager->setMaxPerPage((int) $limit);
  
