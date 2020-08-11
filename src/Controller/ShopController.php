@@ -125,13 +125,14 @@ class ShopController extends AbstractFOSRestController
     {
         $controlData = $call->validatorData($shop);
 
-        $shop->setNameShop($newShop->getNameShop());
-        $shop->setAddress($newShop->getAddress());
-        $shop->setZipCode($newShop->getZipCode());
-        $shop->setCity($newShop->getCity());
-        $shop->setImage($newShop->getImage());
-        $shop->setOffer($newShop->getOffer());
-        $shop->setIdShop($newShop->getIdShop());
+        $shop
+            ->setNameShop($newShop->getNameShop())
+            ->setAddress($newShop->getAddress())
+            ->setZipCode($newShop->getZipCode())
+            ->setCity($newShop->getCity())
+            ->setImage($newShop->getImage())
+            ->setOffer($newShop->getOffer())
+            ->setIdShop($newShop->getIdShop());
 
         $this->getDoctrine()->getManager()->flush();
 
