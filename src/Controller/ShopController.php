@@ -116,7 +116,7 @@ class ShopController extends AbstractFOSRestController
      * @Rest\View(StatusCode = 200)
      * @Rest\Put(
      *     path = "les-habitues/shops/{id}",
-     *     name = "app_shops_update",
+     *     name = "app_shop_update",
      *     requirements = {"id"="\d+"}
      * )
      * @ParamConverter("newShop", converter="fos_rest.request_body")
@@ -143,7 +143,7 @@ class ShopController extends AbstractFOSRestController
      * @Rest\View(StatusCode = 204)
      * @Rest\Delete(
      *     path = "les-habitues/shops/{id}",
-     *     name = "app_shops_delete",
+     *     name = "app_shop_delete",
      *     requirements = {"id"="\d+"}
      * )
      */
