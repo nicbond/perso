@@ -6,6 +6,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 use Hateoas\Configuration\Annotation as Hateoas;
+use Nelmio\ApiDocBundle\Annotation\Model;
+use Swagger\Annotations as SWG;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ShopRepository")
@@ -42,46 +44,54 @@ class Shop
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @SWG\Property(type="integer")
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\Length(min=4, max=255, allowEmptyString=false)
+     * @SWG\Property(type="string")
      */
     private $nameShop;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\Length(min=5, max=255, allowEmptyString=false)
+     * @SWG\Property(type="string")
      */
     private $address;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\Regex("/^[0-9]{5}$/")
+     * @SWG\Property(type="string")
      */
     private $zipCode;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\Length(min=4, max=255, allowEmptyString=false)
+     * @SWG\Property(type="string")
      */
     private $city;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\Length(min=5, max=255, allowEmptyString=false)
+     * @SWG\Property(type="string")
      */
     private $image;
 
     /**
      * @ORM\Column(type="float")
+     * @SWG\Property(type="float")
      */
     private $offer;
 
     /**
      * @ORM\Column(type="integer", options={"unsigned":true, "default":0})
+     * @SWG\Property(type="integer")
      */
     private $id_shop;
 
