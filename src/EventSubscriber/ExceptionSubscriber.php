@@ -11,19 +11,28 @@ class ExceptionSubscriber implements EventSubscriberInterface
     public function onKernelException(GetResponseForExceptionEvent $event)
     {
         $exception = $event->getThrowable();
+
+        $message = $exception->getMessage();
         $errorMessage = substr($exception->getMessage(), 0, -35);
-        $errorSecondMessage = substr($exception->getMessage(), 0, -37);
+        $errorSecondMessage = substr($exception->getMessage(), 0, -38);
+
+        $findme   = 'Invalid data';
+
+        $pos = strpos($message, $findme);
 
         if ($errorMessage == 'App\Entity\Shop object not found') {
             $message = 'Resource not found';
+            $status = 404;
         } else if ($errorSecondMessage == 'No route found') {
-            $message = $exception->getMessage();
+            $status = 404;
+        } else if ($pos !== false) {
+            $status = 400;
         } else {
-            $message = $exception->getMessage();
+            $status = 500;
         }
 
         $data = [
-            'status' => $exception->getStatusCode(),
+            'status' => $status,
             'message' => $message
         ];
 
