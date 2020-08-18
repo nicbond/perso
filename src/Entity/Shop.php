@@ -5,8 +5,38 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
+use Hateoas\Configuration\Annotation as Hateoas;
+use Nelmio\ApiDocBundle\Annotation\Model;
+use Swagger\Annotations as SWG;
+
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ShopRepository")
+ *
+ * @Hateoas\Relation(
+ *      "self",
+ *      href = @Hateoas\Route(
+ *          "app_shop_show",
+ *          parameters = { "id" = "expr(object.getId())" },
+ *          absolute = true
+ *      )
+ * )
+ * @Hateoas\Relation(
+ *      "modify",
+ *      href = @Hateoas\Route(
+ *          "app_shop_update",
+ *          parameters = { "id" = "expr(object.getId())" },
+ *          absolute = true
+ *      )
+ * )
+ * @Hateoas\Relation(
+ *      "delete",
+ *      href = @Hateoas\Route(
+ *          "app_shop_delete",
+ *          parameters = { "id" = "expr(object.getId())" },
+ *          absolute = true
+ *      )
+ * )
+ *
  */
 class Shop
 {
@@ -14,46 +44,54 @@ class Shop
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @SWG\Property(type="integer")
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\Length(min=4, max=255, allowEmptyString=false)
+     * @SWG\Property(type="string")
      */
     private $nameShop;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\Length(min=5, max=255, allowEmptyString=false)
+     * @SWG\Property(type="string")
      */
     private $address;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\Regex("/^[0-9]{5}$/")
+     * @SWG\Property(type="string")
      */
     private $zipCode;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\Length(min=4, max=255, allowEmptyString=false)
+     * @SWG\Property(type="string")
      */
     private $city;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\Length(min=5, max=255, allowEmptyString=false)
+     * @SWG\Property(type="string")
      */
     private $image;
 
     /**
      * @ORM\Column(type="float")
+     * @SWG\Property(type="float")
      */
     private $offer;
 
     /**
      * @ORM\Column(type="integer", options={"unsigned":true, "default":0})
+     * @SWG\Property(type="integer")
      */
     private $id_shop;
 

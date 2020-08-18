@@ -4,6 +4,11 @@ nelmio_api_doc:
             title: My App
             description: This is an awesome app!
             version: 1.0.0
-    areas: # to filter documented areas
-        path_patterns:
-            - ^/api(?!/doc$) # Accepts routes under /api except /api/doc
+        tags:
+        - name: "Shops"
+          description: "Operations about shops"
+        - name: "Technical test"
+          description: "Call api les-habitues"
+    areas:
+        default:
+            path_patterns: [ /les-habitues/ ]

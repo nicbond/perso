@@ -17,6 +17,9 @@ use FOS\RestBundle\Controller\Annotations\QueryParam;
 use App\Repository\ShopRepository;
 
 use App\Service\Call;
+use Nelmio\ApiDocBundle\Annotation\Operation;
+use Nelmio\ApiDocBundle\Annotation\Model;
+use Swagger\Annotations as SWG;
 
 class ShopController extends AbstractFOSRestController
 {
@@ -31,6 +34,23 @@ class ShopController extends AbstractFOSRestController
     }
 
     /**
+     * @SWG\Get(
+     *     description="Get the list of all shops",
+     *     tags={"Shops"},
+     *     summary="Get the list of all shops",
+     *     @SWG\Response(
+     *         response=200,
+     *         description="The request has succeeded",
+     *         @Model(type=Shop::class)
+     *     ),
+     *     @SWG\Response(
+     *         response=500,
+     *         description="Internal Server Error"
+     *     )
+     *),
+     * @SWG\Tag(
+     *   name="Shops"
+     * )
      * @Rest\Get("les-habitues/shops/list", name="app_shops_listing")
      * @Rest\QueryParam(
      *     name="keyword",
@@ -67,6 +87,26 @@ class ShopController extends AbstractFOSRestController
     }
 
     /**
+     * @SWG\Get(
+     *     description="Call api les-habitues and save or update the data if already exist",
+     *     tags={"Technical test"},
+     *     summary="Call api les-habitues and save or update the data if already exist",
+     *     @SWG\Response(
+     *         response=201,
+     *         description="Returned when created"
+     *     ),
+     *     @SWG\Response(
+     *         response=400,
+     *         description="Returned when a violation is raised by validation"
+     *     ),
+     *     @SWG\Response(
+     *         response=500,
+     *         description="Internal Server Error"
+     *     )
+     *),
+     * @SWG\Tag(
+     *   name="Technical test"
+     * )
      * @Rest\Get("les-habitues/shops", name="app_shops_list")
      * @param Request $request
      * @return Response
@@ -78,6 +118,86 @@ class ShopController extends AbstractFOSRestController
     }
 
     /**
+     * @SWG\Post(
+     *     description="Create one shop",
+     *     tags={"Shops"},
+     *     summary="Create one shop",
+     * @SWG\Parameter(
+     *     name="name_shop",
+     *     in="body",
+     *     description="Name of the shop",
+     *     type="string",
+     *     required=true,
+     * @SWG\Property(property="name_shop", type="string", example="les-habitues")
+     * ),
+     * @SWG\Parameter(
+     *     name="address",
+     *     in="body",
+     *     description="Shop address",
+     *     type="string",
+     *     required=true,
+     * @SWG\Property(property="address", type="string", example="48 Rue Sainte-Anne")
+     * ),
+     * @SWG\Parameter(
+     *     name="zip_code",
+     *     in="body",
+     *     description="Zip code",
+     *     type="string",
+     *     required=true,
+     * @SWG\Property(property="zip_code", type="string", example="75002")
+     * ),
+     * @SWG\Parameter(
+     *     name="city",
+     *     in="body",
+     *     description="Shop city",
+     *     type="string",
+     *     required=true,
+     * @SWG\Schema(type="string")
+     * ),
+     * @SWG\Parameter(
+     *     name="image",
+     *     in="body",
+     *     description="Image",
+     *     type="string",
+     *     required=true,
+     * @SWG\Property(property="image", type="string", example="https://media.leshabitues.fr/shop/766/pic_35a79db69a94837a5228c983d066638e.jpg")
+     * ),
+     * @SWG\Parameter(
+     *     name="offer",
+     *     in="body",
+     *     description="Offer",
+     *     type="float",
+     *     required=true,
+     * @SWG\Property(property="offer", type="float", example="2.00")
+     * ),
+     * @SWG\Parameter(
+     *     name="id_shop",
+     *     in="body",
+     *     description="ID Shop: by default the value will be 0",
+     *     type="integer",
+     *     required=true,
+     * @SWG\Property(property="id_shop", type="integer", example="0")
+     * ),
+     *     @SWG\Response(
+     *         response=201,
+     *         description="Returned when created"
+     *     ),
+     *     @SWG\Response(
+     *         response=400,
+     *         description="Returned when a violation is raised by validation"
+     *     ),
+     *     @SWG\Response(
+     *         response=404,
+     *         description="Returned when no resource or url found"
+     *     ),
+     *     @SWG\Response(
+     *         response=500,
+     *         description="Internal Server Error"
+     *     )
+     * )
+     * @SWG\Tag(
+     *   name="Shops"
+     * )
      * @Rest\Post(
      *    path = "les-habitues/shops",
      *    name = "app_shop_create"
@@ -100,6 +220,33 @@ class ShopController extends AbstractFOSRestController
     }
 
     /**
+     * @SWG\Get(
+     *     description="Get one shop",
+     *     tags={"Shops"},
+     *     summary="Get one shop",
+     * @SWG\Parameter(
+     *     name="id",
+     *     in="path",
+     *     description="Resource ID",
+     *     type="integer",
+     * @SWG\Schema(type="integer"),
+     * ),
+     *     @SWG\Response(
+     *         response=200,
+     *         description="Get one shop"
+     *     ),
+     *     @SWG\Response(
+     *         response=404,
+     *         description="Returned when no resource or url found"
+     *     ),
+     *     @SWG\Response(
+     *         response=500,
+     *         description="Internal Server Error"
+     *     )
+     *),
+     * @SWG\Tag(
+     *   name="Shops"
+     * )
      * @Rest\Get(
      *     path = "les-habitues/shops/{id}",
      *     name = "app_shop_show",
@@ -113,10 +260,37 @@ class ShopController extends AbstractFOSRestController
     }
 
     /**
+     * @SWG\Put(
+     *     description="Update one shop",
+     *     tags={"Shops"},
+     *     summary="Update one shop",
+     * @SWG\Parameter(
+     *     name="id",
+     *     in="path",
+     *     description="Resource ID",
+     *     type="integer",
+     * @SWG\Schema(type="integer"),
+     * ),
+     *     @SWG\Response(
+     *         response=200,
+     *         description="Update succeed"
+     *     ),
+     *     @SWG\Response(
+     *         response=400,
+     *         description="Returned when a violation is raised by validation"
+     *     ),
+     *     @SWG\Response(
+     *         response=500,
+     *         description="Internal Server Error"
+     *     )
+     * )
+     * @SWG\Tag(
+     *   name="Shops"
+     * )
      * @Rest\View(StatusCode = 200)
      * @Rest\Put(
      *     path = "les-habitues/shops/{id}",
-     *     name = "app_shops_update",
+     *     name = "app_shop_update",
      *     requirements = {"id"="\d+"}
      * )
      * @ParamConverter("newShop", converter="fos_rest.request_body")
@@ -125,13 +299,14 @@ class ShopController extends AbstractFOSRestController
     {
         $controlData = $call->validatorData($shop);
 
-        $shop->setNameShop($newShop->getNameShop());
-        $shop->setAddress($newShop->getAddress());
-        $shop->setZipCode($newShop->getZipCode());
-        $shop->setCity($newShop->getCity());
-        $shop->setImage($newShop->getImage());
-        $shop->setOffer($newShop->getOffer());
-        $shop->setIdShop($newShop->getIdShop());
+        $shop
+            ->setNameShop($newShop->getNameShop())
+            ->setAddress($newShop->getAddress())
+            ->setZipCode($newShop->getZipCode())
+            ->setCity($newShop->getCity())
+            ->setImage($newShop->getImage())
+            ->setOffer($newShop->getOffer())
+            ->setIdShop($newShop->getIdShop());
 
         $this->getDoctrine()->getManager()->flush();
 
@@ -139,10 +314,33 @@ class ShopController extends AbstractFOSRestController
     }
 
     /**
+     * @SWG\Delete(
+     *     description="Delete one shop",
+     *     tags={"Shops"},
+     *     summary="Delete one shop",
+     * @SWG\Parameter(
+     *     name="id",
+     *     in="path",
+     *     description="Resource ID",
+     *     type="integer",
+     * @SWG\Schema(type="integer"),
+     * ),
+     *     @SWG\Response(
+     *         response=204,
+     *         description="The server has successfully fulfilled the request and that there is no additional content to send in the response"
+     *     ),
+     *     @SWG\Response(
+     *         response=404,
+     *         description="Returned when no resource or url found"
+     *     )
+     *),
+     * @SWG\Tag(
+     *   name="Shops"
+     * )
      * @Rest\View(StatusCode = 204)
      * @Rest\Delete(
      *     path = "les-habitues/shops/{id}",
-     *     name = "app_shops_delete",
+     *     name = "app_shop_delete",
      *     requirements = {"id"="\d+"}
      * )
      */

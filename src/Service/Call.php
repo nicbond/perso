@@ -87,26 +87,28 @@ class Call
                 try {
                     if (is_null($shopSearch)) {
                         $shop = new Shop();
-                        $shop->setNameShop($data['data'][$i]['chain']);
-                        $shop->setAddress($data['data'][$i]['localisations'][0]['address']);
-                        $shop->setZipCode($data['data'][$i]['localisations'][0]['zipcode']);
-                        $shop->setCity($data['data'][$i]['localisations'][0]['city']);
-                        $shop->setImage($data['data'][$i]['picture_url']);
-                        $shop->setOffer($data['data'][$i]['offers'][0]['reduction']);
-                        $shop->setIdShop($data['data'][$i]['objectID']);
+                        $shop
+                            ->setNameShop($data['data'][$i]['chain'])
+                            ->setAddress($data['data'][$i]['localisations'][0]['address'])
+                            ->setZipCode($data['data'][$i]['localisations'][0]['zipcode'])
+                            ->setCity($data['data'][$i]['localisations'][0]['city'])
+                            ->setImage($data['data'][$i]['picture_url'])
+                            ->setOffer($data['data'][$i]['offers'][0]['reduction'])
+                            ->setIdShop($data['data'][$i]['objectID']);
                         
                         $this->validatorData($shop); //Data control
 
                         $this->entityManager->persist($shop);
                     } else {
                         $shopAlreadyExist = $this->repository->find($shopSearch->getId());
-                        $shopAlreadyExist->setNameShop($data['data'][$i]['chain']);
-                        $shopAlreadyExist->setAddress($data['data'][$i]['localisations'][0]['address']);
-                        $shopAlreadyExist->setZipCode($data['data'][$i]['localisations'][0]['zipcode']);
-                        $shopAlreadyExist->setCity($data['data'][$i]['localisations'][0]['city']);
-                        $shopAlreadyExist->setImage($data['data'][$i]['picture_url']);
-                        $shopAlreadyExist->setOffer($data['data'][$i]['offers'][0]['reduction']);
-                        $shopAlreadyExist->setIdShop($data['data'][$i]['objectID']);
+                        $shopAlreadyExist
+                            ->setNameShop($data['data'][$i]['chain'])
+                            ->setAddress($data['data'][$i]['localisations'][0]['address'])
+                            ->setZipCode($data['data'][$i]['localisations'][0]['zipcode'])
+                            ->setCity($data['data'][$i]['localisations'][0]['city'])
+                            ->setImage($data['data'][$i]['picture_url'])
+                            ->setOffer($data['data'][$i]['offers'][0]['reduction'])
+                            ->setIdShop($data['data'][$i]['objectID']);
 
                         $this->validatorData($shopAlreadyExist); //Data control
 
