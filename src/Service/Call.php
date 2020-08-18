@@ -39,8 +39,14 @@ class Call
      */
     private $validator;
 
-    public function __construct(Client $apiClient, Serializer $serializer, LoggerInterface $logger,
-                                ShopRepository $repository, EntityManagerInterface $entityManager, ValidatorInterface $validator)
+    public function __construct(
+        Client $apiClient,
+        Serializer $serializer,
+        LoggerInterface $logger,
+        ShopRepository $repository,
+        EntityManagerInterface $entityManager,
+        ValidatorInterface $validator
+    )
     {
         $this->apiClient = $apiClient;
         $this->serializer = $serializer;
@@ -67,7 +73,7 @@ class Call
             $this->getData($data);
         }
         
-        if ($this->getData($data) == true){
+        if ($this->getData($data) == true) {
             $response = new Response('SHOP CREATED OR UPDATED', Response::HTTP_CREATED);
         }
 
@@ -84,10 +90,10 @@ class Call
             $id_shop = $data['data'][$i]['objectID'];
             $shopSearch = $this->repository->findOneBy(array('id_shop' => $id_shop));
 
-                try {
-                    if (is_null($shopSearch)) {
-                        $shop = new Shop();
-                        $shop
+            try {
+                if (is_null($shopSearch)) {
+                    $shop = new Shop();
+                    $shop
                             ->setNameShop($data['data'][$i]['chain'])
                             ->setAddress($data['data'][$i]['localisations'][0]['address'])
                             ->setZipCode($data['data'][$i]['localisations'][0]['zipcode'])
@@ -96,12 +102,12 @@ class Call
                             ->setOffer($data['data'][$i]['offers'][0]['reduction'])
                             ->setIdShop($data['data'][$i]['objectID']);
                         
-                        $this->validatorData($shop); //Data control
+                    $this->validatorData($shop); //Data control
 
-                        $this->entityManager->persist($shop);
-                    } else {
-                        $shopAlreadyExist = $this->repository->find($shopSearch->getId());
-                        $shopAlreadyExist
+                    $this->entityManager->persist($shop);
+                } else {
+                    $shopAlreadyExist = $this->repository->find($shopSearch->getId());
+                    $shopAlreadyExist
                             ->setNameShop($data['data'][$i]['chain'])
                             ->setAddress($data['data'][$i]['localisations'][0]['address'])
                             ->setZipCode($data['data'][$i]['localisations'][0]['zipcode'])
@@ -110,14 +116,14 @@ class Call
                             ->setOffer($data['data'][$i]['offers'][0]['reduction'])
                             ->setIdShop($data['data'][$i]['objectID']);
 
-                        $this->validatorData($shopAlreadyExist); //Data control
+                    $this->validatorData($shopAlreadyExist); //Data control
 
-                        $this->entityManager->persist($shopAlreadyExist);
-                    }
-                    $this->entityManager->flush();
-                } catch (\Doctrine\ORM\ORMException $e) {
-                    $errorMsg = 'Error Doctrine for the id_shop '.$data['data'][$i]['objectID'].'<br/>'.$e->getMessage();
+                    $this->entityManager->persist($shopAlreadyExist);
                 }
+                $this->entityManager->flush();
+            } catch (\Doctrine\ORM\ORMException $e) {
+                $errorMsg = 'Error Doctrine for the id_shop '.$data['data'][$i]['objectID'].'<br/>'.$e->getMessage();
+            }
             $i++;
         } while ($i <= $size);
         return true;
@@ -137,4 +143,3 @@ class Call
         }
     }
 }
-?>
