@@ -37,13 +37,17 @@ class ShopController extends AbstractFOSRestController
      * @SWG\Get(
      *     description="Get the list of all shops",
      *     tags={"Shops"},
-     *     summary="Get the list of all shops"
-     *),
+     *     summary="Get the list of all shops",
      *     @SWG\Response(
      *         response=200,
-     *         description="The request has succeeded"
+     *         description="The request has succeeded",
+     *         @Model(type=Shop::class)
+     *     ),
+     *     @SWG\Response(
+     *         response=500,
+     *         description="Internal Server Error"
      *     )
-     * ),
+     *),
      * @SWG\Tag(
      *   name="Shops"
      * )
@@ -86,13 +90,20 @@ class ShopController extends AbstractFOSRestController
      * @SWG\Get(
      *     description="Call api les-habitues and save or update the data if already exist",
      *     tags={"Technical test"},
-     *     summary="Call api les-habitues and save or update the data if already exist"
-     *),
+     *     summary="Call api les-habitues and save or update the data if already exist",
      *     @SWG\Response(
-     *         response=200,
-     *         description="The request has succeeded"
+     *         response=201,
+     *         description="Returned when created"
+     *     ),
+     *     @SWG\Response(
+     *         response=400,
+     *         description="Returned when a violation is raised by validation"
+     *     ),
+     *     @SWG\Response(
+     *         response=500,
+     *         description="Internal Server Error"
      *     )
-     * ),
+     *),
      * @SWG\Tag(
      *   name="Technical test"
      * )
@@ -116,13 +127,15 @@ class ShopController extends AbstractFOSRestController
      *     in="body",
      *     description="Name of the shop",
      *     type="string",
+     *     required=true,
      * @SWG\Property(property="name_shop", type="string", example="les-habitues")
      * ),
      * @SWG\Parameter(
      *     name="address",
      *     in="body",
-     *     description="Address of the shop",
+     *     description="Shop address",
      *     type="string",
+     *     required=true,
      * @SWG\Property(property="address", type="string", example="48 Rue Sainte-Anne")
      * ),
      * @SWG\Parameter(
@@ -130,20 +143,23 @@ class ShopController extends AbstractFOSRestController
      *     in="body",
      *     description="Zip code",
      *     type="string",
+     *     required=true,
      * @SWG\Property(property="zip_code", type="string", example="75002")
      * ),
      * @SWG\Parameter(
      *     name="city",
      *     in="body",
-     *     description="City Shop",
+     *     description="Shop city",
      *     type="string",
-     * @SWG\Property(property="city", type="string", example="Paris")
+     *     required=true,
+     * @SWG\Schema(type="string")
      * ),
      * @SWG\Parameter(
      *     name="image",
      *     in="body",
      *     description="Image",
      *     type="string",
+     *     required=true,
      * @SWG\Property(property="image", type="string", example="https://media.leshabitues.fr/shop/766/pic_35a79db69a94837a5228c983d066638e.jpg")
      * ),
      * @SWG\Parameter(
@@ -151,6 +167,7 @@ class ShopController extends AbstractFOSRestController
      *     in="body",
      *     description="Offer",
      *     type="float",
+     *     required=true,
      * @SWG\Property(property="offer", type="float", example="2.00")
      * ),
      * @SWG\Parameter(
@@ -158,6 +175,7 @@ class ShopController extends AbstractFOSRestController
      *     in="body",
      *     description="ID Shop: by default the value will be 0",
      *     type="integer",
+     *     required=true,
      * @SWG\Property(property="id_shop", type="integer", example="0")
      * ),
      *     @SWG\Response(
@@ -165,8 +183,16 @@ class ShopController extends AbstractFOSRestController
      *         description="Returned when created"
      *     ),
      *     @SWG\Response(
-     *         response=404,
+     *         response=400,
      *         description="Returned when a violation is raised by validation"
+     *     ),
+     *     @SWG\Response(
+     *         response=404,
+     *         description="Returned when no resource or url found"
+     *     ),
+     *     @SWG\Response(
+     *         response=500,
+     *         description="Internal Server Error"
      *     )
      * )
      * @SWG\Tag(
@@ -201,15 +227,23 @@ class ShopController extends AbstractFOSRestController
      * @SWG\Parameter(
      *     name="id",
      *     in="path",
-     *     description="ID de la ressource",
+     *     description="Resource ID",
      *     type="integer",
-     * @SWG\Schema(type="integer")
+     * @SWG\Schema(type="integer"),
      * ),
      *     @SWG\Response(
      *         response=200,
      *         description="Get one shop"
+     *     ),
+     *     @SWG\Response(
+     *         response=404,
+     *         description="Returned when no resource or url found"
+     *     ),
+     *     @SWG\Response(
+     *         response=500,
+     *         description="Internal Server Error"
      *     )
-     * )
+     *),
      * @SWG\Tag(
      *   name="Shops"
      * )
@@ -229,13 +263,27 @@ class ShopController extends AbstractFOSRestController
      * @SWG\Put(
      *     description="Update one shop",
      *     tags={"Shops"},
-     *     summary="Update one shop"
-     *),
+     *     summary="Update one shop",
+     * @SWG\Parameter(
+     *     name="id",
+     *     in="path",
+     *     description="Resource ID",
+     *     type="integer",
+     * @SWG\Schema(type="integer"),
+     * ),
      *     @SWG\Response(
      *         response=200,
-     *         description="Get one shop"
+     *         description="Update succeed"
+     *     ),
+     *     @SWG\Response(
+     *         response=400,
+     *         description="Returned when a violation is raised by validation"
+     *     ),
+     *     @SWG\Response(
+     *         response=500,
+     *         description="Internal Server Error"
      *     )
-     * ),
+     * )
      * @SWG\Tag(
      *   name="Shops"
      * )
@@ -269,13 +317,23 @@ class ShopController extends AbstractFOSRestController
      * @SWG\Delete(
      *     description="Delete one shop",
      *     tags={"Shops"},
-     *     summary="Delete one shop"
-     *),
+     *     summary="Delete one shop",
+     * @SWG\Parameter(
+     *     name="id",
+     *     in="path",
+     *     description="Resource ID",
+     *     type="integer",
+     * @SWG\Schema(type="integer"),
+     * ),
      *     @SWG\Response(
      *         response=204,
      *         description="The server has successfully fulfilled the request and that there is no additional content to send in the response"
+     *     ),
+     *     @SWG\Response(
+     *         response=404,
+     *         description="Returned when no resource or url found"
      *     )
-     * ),
+     *),
      * @SWG\Tag(
      *   name="Shops"
      * )
