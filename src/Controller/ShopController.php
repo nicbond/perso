@@ -214,9 +214,10 @@ class ShopController extends AbstractFOSRestController
         $em->flush();
 
         return $this->view(
-            $shop, 
+            $shop,
             Response::HTTP_CREATED,
-            ['Location' => $this->generateUrl('app_shop_show', ['id' => $shop->getId(), UrlGeneratorInterface::ABSOLUTE_URL])]);
+            ['Location' => $this->generateUrl('app_shop_show', ['id' => $shop->getId(), UrlGeneratorInterface::ABSOLUTE_URL])]
+        );
     }
 
     /**
