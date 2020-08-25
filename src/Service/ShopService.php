@@ -54,6 +54,34 @@ final class ShopService
         $this->validator = $validator;
     }
 
+    public function methodHttp($method, $url, $data, $options = [])
+    {
+        $options['body'] = $this->serializer->serialize($data, 'json');
+        $options['headers'] = ['Content-Type' => 'application/json'];
+
+        try {
+            switch($method) {
+                case 'post':
+                    $response = $this->apiClient->post($url, $options);
+                    break;
+                case 'put':
+                    $response = $this->apiClient->put($url, $options);
+                    break;
+                case 'delete':
+                    $response = $this->apiClient->delete($url);
+                    break;
+                case 'get':
+                    $response = $this->apiClient->get($url);
+                    break;
+                default:
+                    throw new \Exception('Missing request Method');
+            }
+        } catch (\Exception $e) {
+            $this->logger->error('Les informations ne sont pas disponibles pour le moment.');
+            return ['error' => 'Les informations ne sont pas disponibles pour le moment.'];
+        }
+    }
+
     public function validatorData(Shop $shop)
     {
         $violations = $this->validator->validate($shop);
