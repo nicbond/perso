@@ -3,14 +3,13 @@
 namespace App\Service;
 
 use App\Entity\Shop;
-use GuzzleHttp\Client;
-use PSR\Log\LoggerInterface;
-use JMS\Serializer\Serializer;
 use App\Repository\ShopRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
-
+use GuzzleHttp\Client;
+use JMS\Serializer\Serializer;
+use PSR\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 final class ShopService
 {
@@ -46,8 +45,7 @@ final class ShopService
         ShopRepository $repository,
         EntityManagerInterface $entityManager,
         ValidatorInterface $validator
-    )
-    {
+    ) {
         $this->apiClient = $apiClient;
         $this->serializer = $serializer;
         $this->logger = $logger;
@@ -63,7 +61,7 @@ final class ShopService
         $options['headers'] = ['Content-Type' => 'application/json'];
 
         try {
-            switch($method) {
+            switch ($method) {
                 case 'post':
                     $response = $this->apiClient->post($url, $options);
                     break;
@@ -81,6 +79,7 @@ final class ShopService
             }
         } catch (\Exception $e) {
             $this->logger->error('Les informations ne sont pas disponibles pour le moment.');
+
             return ['error' => 'Les informations ne sont pas disponibles pour le moment.'];
         }
 
@@ -88,7 +87,7 @@ final class ShopService
         $data = $this->serializer->deserialize($response->getBody()->getContents(), 'array', 'json');
         $response = $this->getHttpCode($httpCode, $id, $data);
 
-        return $response
+        return $response;
     }
 
     public function getHttpCode($httpCode, $id, array $data): Response
@@ -125,18 +124,19 @@ final class ShopService
                 $response = new Response('UNDOCUMENTED ERROR', Response::HTTP_INTERNAL_SERVER_ERROR);
                 break;
         }
+
         return $response;
     }
 
     public function getData(array $data)
     {
-        $size = count($data['data']); 
-        $size = $size-1;
+        $size = count($data['data']);
+        $size = $size - 1;
         $i = 0;
 
         do {
             $id_shop = $data['data'][$i]['objectID'];
-            $shopSearch = $this->repository->findOneBy(array('id_shop' => $id_shop));
+            $shopSearch = $this->repository->findOneBy(['id_shop' => $id_shop]);
 
             try {
                 if (is_null($shopSearch)) {
@@ -172,7 +172,7 @@ final class ShopService
             } catch (\Doctrine\ORM\ORMException $e) {
                 $errorMsg = 'Error Doctrine for the id_shop '.$data['data'][$i]['objectID'].'<br/>'.$e->getMessage();
             }
-            $i++;
+            ++$i;
         } while ($i <= $size);
     }
 
@@ -181,9 +181,9 @@ final class ShopService
         $violations = $this->validator->validate($shop);
 
         if (count($violations)) {
-            $message = 'Invalid data. Here are the errors you need to correct: ' .'</br>';
+            $message = 'Invalid data. Here are the errors you need to correct: '.'</br>';
             foreach ($violations as $violation) {
-                $message .= sprintf("Field %s: %s ", $violation->getPropertyPath(), $violation->getMessage());
+                $message .= sprintf('Field %s: %s ', $violation->getPropertyPath(), $violation->getMessage());
                 $message .= '</br>';
             }
             throw new \Exception($message);
