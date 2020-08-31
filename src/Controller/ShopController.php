@@ -152,7 +152,7 @@ class ShopController extends AbstractFOSRestController
      *     description="Shop city",
      *     type="string",
      *     required=true,
-     * @SWG\Schema(type="string")
+     * @SWG\Property(property="city", type="string", example="Paris")
      * ),
      * @SWG\Parameter(
      *     name="image",
